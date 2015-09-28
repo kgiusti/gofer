@@ -128,6 +128,9 @@ class Connection(BaseConnection):
         self._impl = None
         try:
             connection.close()
+            # temporary work-around for socket leak:  kick the state machine
+            # one more time to release socket:
+            connection.run()
             log.info('closed: %s', self.url)
         except Exception:
             pass
